@@ -19,6 +19,8 @@ function saveGrade(grade) {
 
     grade.id = allGrades.nextId;
 
+    grade = {id: grade.id, ...grade};
+
     allGrades.grades.push(grade);
     allGrades.nextId += 1;
 
@@ -47,12 +49,11 @@ function getGradeById(id) {
 
 }
 
-
 router.post('/newGrade', (request, response) => {
     const { student, subject, type, value } = request.body;
 
     const newGrade = {
-        student, subject, type, value: parseFloat(value), date: new Date()
+        student, subject, type, value: parseFloat(value), timestamp: new Date()
     }
 
     const savedGrade = saveGrade(newGrade);
