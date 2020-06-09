@@ -28,7 +28,27 @@ function saveGrade(grade) {
     return grade;
 }
 
+function getGradeById(id) {
+    try {
+        const allGrades = getGrades();
+        const filteredGrade = allGrades.grades.find(grade => grade.id == id);
 
+        console.log(filteredGrade);
+
+        
+        if (typeof filteredGrade !== 'undefined') {
+            console.log('inside filtered');
+            
+            return filteredGrade;
+        }
+
+        throw 'Could not find this grade';
+        
+    } catch (err) {
+        throw err;
+    }
+
+}
 
 
 api.post('/newGrade', (request, response) => {
@@ -43,9 +63,16 @@ api.post('/newGrade', (request, response) => {
     response.send(savedGrade);
 })
 
+api.get('/getGrade/:id', (request, response) => {
+    try {
+        const gradeRequested = getGradeById(request.params.id);
+
+        response.json(gradeRequested);
+    } catch (err) {
+        response.status(404).send(err)
+    }
+})
 
 
 api.listen(3000, () => {
-    console.log("Hello");
-
 });
