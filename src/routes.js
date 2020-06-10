@@ -73,6 +73,22 @@ function deleteGrade(id){
     }
 }
 
+function sumGrades(student, subject){
+    try{
+        const allGrades = getGrades();
+    
+        const filteredGrades = allGrades.grades.filter(grade => grade.student === student && grade.subject === subject);
+        if(filteredGrades.length === 0){
+            throw 'Student or subject not found';
+        }
+        const sumValues = filteredGrades.reduce((acc = 0, cur) => acc + parseInt(cur.value), 0);
+        return sumValues;
+
+    }catch(error){
+        throw error;
+    }
+}
+
 router.post('/newGrade', (request, response) => {
     const { student, subject, type, value } = request.body;
 
@@ -92,6 +108,16 @@ router.get('/getGrade/:id', (request, response) => {
         response.json(gradeRequested);
     } catch (err) {
         response.status(404).send(err)
+    }
+});
+
+router.get('/valueSum', (request, response) => {
+    try{
+        const {student, subject} = request.body;
+        const totalValue = sumGrades(student, subject);
+        response.json({value: totalValue});
+    }catch(error){
+        response.status(404).send(error);
     }
 });
 
