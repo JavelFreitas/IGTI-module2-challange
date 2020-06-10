@@ -89,6 +89,27 @@ function sumGrades(student, subject){
     }
 }
 
+function typeAverage(subject, type){
+    try{
+        const allGrades = getGrades();
+    
+        const filteredGrades = allGrades.grades.filter(grade => grade.type === type && grade.subject === subject);
+
+        if(filteredGrades.length === 0){
+            throw 'Type or subject not found';
+        }
+
+        const sumValues = filteredGrades.reduce((acc = 0, cur) => acc + parseInt(cur.value), 0);
+    
+        const average = sumValues/filteredGrades.length;
+
+        return average;
+
+    }catch(error){
+        throw error;
+    }
+}
+
 router.post('/newGrade', (request, response) => {
     const { student, subject, type, value } = request.body;
 
@@ -118,6 +139,16 @@ router.get('/valueSum', (request, response) => {
         response.json({value: totalValue});
     }catch(error){
         response.status(404).send(error);
+    }
+});
+
+router.get('/typeAverage', (request, response) => {
+    try{
+        const {subject, type} = request.body;
+        const average = typeAverage(subject, type);
+        response.json({average});
+    }catch(error){
+        response.json({error});
     }
 });
 
