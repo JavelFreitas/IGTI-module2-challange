@@ -49,6 +49,30 @@ function getGradeById(id) {
 
 }
 
+function deleteGrade(id){
+    try{
+        const allGrades = getGrades();
+        const index = parseInt(id);
+        let message = '';
+        const deletedGrade = allGrades.grades.find(grade => grade.id === index);
+        if(typeof deletedGrade === 'undefined'){
+            message = { error: 'Grade not found' }
+            throw message;
+        }
+
+        const filteredGrades = allGrades.grades.filter(grade => grade.id !== index);
+
+        const remainingGrades = {nextId: (allGrades.nextId), grades: filteredGrades}
+        
+        writeFile(remainingGrades);
+        message = { status: 'Deleted with success', deletedGrade}
+        return message;
+
+    }catch(err){
+        throw err;
+    }
+}
+
 router.post('/newGrade', (request, response) => {
     const { student, subject, type, value } = request.body;
 
@@ -59,7 +83,7 @@ router.post('/newGrade', (request, response) => {
     const savedGrade = saveGrade(newGrade);
 
     response.send(savedGrade);
-})
+});
 
 router.get('/getGrade/:id', (request, response) => {
     try {
@@ -69,7 +93,15 @@ router.get('/getGrade/:id', (request, response) => {
     } catch (err) {
         response.status(404).send(err)
     }
-})
+});
 
+router.delete('/deleteGrade/:id', (request, response) => {
+    try{
+        const deleteMessage = deleteGrade(request.params.id)
+        response.json(deleteMessage);
+    }catch(err){
+        response.status(404).send(err);
+    }
+});
 
 module.exports = router;
