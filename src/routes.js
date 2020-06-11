@@ -100,7 +100,10 @@ function typeAverage(subject, type) {
         }
 
         const sumValues = filteredGrades.reduce((acc = 0, cur) => acc + parseInt(cur.value), 0);
-
+        
+        console.log(sumValues);
+        console.log(filteredGrades.length);
+        
         const average = sumValues / filteredGrades.length;
 
         return average;
@@ -119,6 +122,14 @@ function getThreeBestGrades(subject, type) {
         if (filteredGrades.length === 0) {
             throw 'Type or subject not found';
         }
+
+        const sortedGrades = filteredGrades.sort((a, b) => {
+            if(a.value > b.value) return -1
+            else if(a.value < b.value) return 1;
+            else return 0;
+        });
+
+        return sortedGrades.slice(0,3);
 
 
     } catch (error) {
