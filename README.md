@@ -1,6 +1,6 @@
 # Challange 2 module 2
 
-Practical challange from IGTI's 2020 Fullstack Bootcamp.
+Practical challenge from IGTI's 2020 Fullstack Bootcamp.
 
 ## Objective
 
